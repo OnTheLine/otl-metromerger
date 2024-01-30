@@ -9,20 +9,28 @@ https://ontheline.github.io/otl-metromerger/index.html
 <iframe src="https://ontheline.github.io/otl-metromerger/index.html" width="100%" height=520></iframe>
 ```
 
-## To Do
-- update data sources from CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
+## Data
+CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
   - Town
   - Population 2021 (from Census ACS)
   - Income per capita 2021 (from Census ACS)
   - Equalized Net Grand List (ENGL) as "taxable property" (from CT OPM)
+
+## Credits
+- Thanks to the creator of the Leaflet Interactive Choropleth Map tutorial (http://leafletjs.com/examples/choropleth.html)
+- Thanks to @alvinschang at CT Mirror for creating functions to display info window data, based on examples such as http://projects.ctmirror.org/content/2014/05/raceSchools/
+- Thanks to @kitzj for redesigning code and interface
+- Thanks to @erose for helping me with the JavaScript logic
+- Thanks to @nav10003 Natalia Vorotyntseva at UConn MAGIC (http://magic.lib.uconn.edu) for code to toggle on/off polygons, display results for multiple regions, and export results
+
+## To Do
+- update all README instructions below
+- revise geojson and variable names to remove year; place year in file name only
+- add dollar signs in results
+- check sums for display and exports, since they do not appear to match
 - update to newer Leaflet hosted CDN https://leafletjs.com/download.html
-- update to newer jQuery hosted CDN https://releases.jquery.com
-- redesign code: simplify from `data.js` to `data.geojson` format, as we do in nearly all other OnTheLine leaflet maps
 - add GA code
-- rewrite all README instructions
 - Create index-frame.html with caption, sources, credits
-- Create better solution to display source data. Currently, source data downloadable via a hard-coded link (data.csv) to GitHub Pages
-- Future redesign to display both indiv and merged data inside info window, perhaps in 2-row table with headings, to unify display and remove redundant labels
 
 
 ## Steps to construct this
@@ -53,9 +61,3 @@ var data =
 - Rename file suffix as .js, place inside local directory, and upload in the Leaflet HTML index template
 
 5) See code comments in the Leaflet index.html template
-
-## Credits
-- Thanks to the creator of the Leaflet Interactive Choropleth Map tutorial (http://leafletjs.com/examples/choropleth.html)
-- Thanks to @alvinschang at CT Mirror for creating functions to display info window data, based on examples such as http://projects.ctmirror.org/content/2014/05/raceSchools/
-- Thanks to @erose for helping me with the JavaScript logic
-- Thanks to @nav10003 Natalia Vorotyntseva at UConn MAGIC (http://magic.lib.uconn.edu) for code to toggle on/off polygons, display results for multiple regions, and export results
