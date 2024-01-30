@@ -12,7 +12,7 @@
   position: absolute;
   bottom: 1%; /* or top: 20% */
   left: 1%;
-  width: 400px; /* my best match for info box auto-width */
+  width: 400px; /* wider to display table output */
   font: 14px/16px Arial, Helvetica, sans-serif;
 }
 #accordion .ui-accordion-content {

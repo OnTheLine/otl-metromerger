@@ -4,18 +4,17 @@
     <title>MetroMerger</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Load Leaflet from a https CDN, not http. Leaflet 1.x not yet supported. -->
+    <!-- To Do : Rewrite code to support Leaflet 1.x -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-    <!-- jQuery dependencies -->
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"
       integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous">
+    </script>
     <link
       rel="stylesheet"
       href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"
@@ -23,11 +22,8 @@
     <script
       src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
       integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c="
-      crossorigin="anonymous"
-    ></script>
-    <!-- Load data.js (town polygons) and css from local directory -->
-    <!-- <script type="text/javascript" src="data.geojson"></script> -->
-
+      crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="style.css" />
     <script>
       $(function () {
@@ -229,8 +225,8 @@
           layer.feature.properties.region = selected_region_num;
 
           towns[selected_region_num][town_id] = [
-            layer.feature.properties.Town,
-            layer.feature.properties.PopACS2021,
+            layer.feature.properties.name,
+            layer.feature.properties.population,
             layer.feature.properties.IncACS2021,
             layer.feature.properties.ENGLY2021,
           ];
@@ -254,8 +250,8 @@
 
           delete towns[layer.feature.properties.region][town_id];
           towns[selected_region_num][town_id] = [
-            layer.feature.properties.Town,
-            layer.feature.properties.PopACS2021,
+            layer.feature.properties.name,
+            layer.feature.properties.population,
             layer.feature.properties.IncACS2021,
             layer.feature.properties.ENGLY2021,
           ];
@@ -273,7 +269,7 @@
       // create ability to clear selections
       function resetFeature(e) {
         geojson.resetStyle(e.target);
-        totalPop -= layer.feature.properties.PopACS2021;
+        totalPop -= layer.feature.properties.population;
         totalIncome -= layer.feature.properties.IncACS2021;
         totalTaxable -= layer.feature.properties.ENGLY2021;
         metroPerCapIncome = totalIncome / totalPop;
@@ -292,7 +288,7 @@
       }
 
       // set up the town map overlay
-      $.getJSON("data.geojson", function (geojsonData) {
+      $.getJSON("map.geojson", function (geojsonData) {
         L.geoJson(geojsonData, {
           style: style,
           onEachFeature: onEachFeature,
@@ -309,21 +305,20 @@
 
       // update the control info window based on feature properties passed
       info.update = function (props) {
-        console.log(props);
         var winName = (this._div.innerHTML =
           "<h4>Click to merge Connecticut towns<br />into hypothetical metro regions:</h4>" +
           (props
-            ? props.Town +
+            ? props.name +
               "<br />" +
-              comma(props.PopACS2021) +
+              comma(props.population) +
               " people" +
               "<br />$" +
-              comma(props.IncACS2021 / props.PopACS2021) +
+              comma(props.IncACS2021 / props.population) +
               " income per capita" +
               "<br />$" +
-              comma(props.ENGLY2021 / props.PopACS2021) +
+              comma(props.ENGLY2021 / props.population) +
               " taxable property per capita" +
-              "<br /><a href='https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data'>2021 CT Municipal Fiscal Indicators</a>"
+              "<br />Source:<br /><a href='https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data'>2021 CT Municipal Fiscal Indicators</a>"
             : "Hover over a town"));
       };
       info.addTo(map);

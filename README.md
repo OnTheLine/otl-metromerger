@@ -1,13 +1,11 @@
 # otl-metromerger
-Simulate the merger (or redistricting) of smaller polygon areas into larger regions, with Leaflet thematic hover map
+Simulate the merger of smaller polygon areas into larger regions, with Leaflet thematic hover map
 
 ## Link
 https://ontheline.github.io/otl-metromerger/index.html
 
-## Shortcode to embed in http://OnTheLine.trincoll.edu
-```
-<iframe src="https://ontheline.github.io/otl-metromerger/index.html" width="100%" height=520></iframe>
-```
+## TO DO: Embed in book
+https://ontheline.trincoll.edu
 
 ## Data
 CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
@@ -17,16 +15,17 @@ CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Governm
   - Equalized Net Grand List (ENGL) as "taxable property" (from CT OPM)
 
 ## Credits
-- Thanks to the creator of the Leaflet Interactive Choropleth Map tutorial (http://leafletjs.com/examples/choropleth.html)
-- Thanks to @alvinschang at CT Mirror for creating functions to display info window data, based on examples such as http://projects.ctmirror.org/content/2014/05/raceSchools/
-- Thanks to @kitzj for redesigning code and interface
-- Thanks to @erose for helping me with the JavaScript logic
-- Thanks to @nav10003 Natalia Vorotyntseva at UConn MAGIC (http://magic.lib.uconn.edu) for code to toggle on/off polygons, display results for multiple regions, and export results
+- @kitzj Joe Kitz for redesigning code and interface
+- @erose Eli Rose for helping me with the JavaScript logic
+- @nav10003 Natalia Vorotyntseva at UConn MAGIC (http://magic.lib.uconn.edu) for code to toggle on/off polygons, display results for multiple regions, and export results
+- @alvinschang Alvin Chang for creating functions to display info window data, based on examples such as http://projects.ctmirror.org/content/2014/05/raceSchools/
 
 ## To Do
 - update all README instructions below
-- revise geojson and variable names to remove year; place year in file name only
-- add dollar signs in results
+- revise code to allow easier data import of Income Per Capita from source, and multiply by population for calculations in the code
+- revise geojson and variable names to remove year
+- display dollar signs in table
+- right-justify numerical data in table
 - check sums for display and exports, since they do not appear to match
 - update to newer Leaflet hosted CDN https://leafletjs.com/download.html
 - add GA code
@@ -34,7 +33,6 @@ CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Governm
 
 
 ## Steps to construct this
-
 Simplify instructions below: To join new data to the existing Connecticut towns geojson file, use http://mapshaper.org command line tools to jump over steps 2-3-4. See http://www.datavizforall.org/shape/mapshaper/index.html
 
 1) Begin with Leaflet choropleth tutorial at http://leafletjs.com/examples/choropleth.html
