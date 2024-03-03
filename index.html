@@ -154,10 +154,10 @@
               "<td style='text-align: right;'>" +
               comma(towns[region][key][1]) +
               "</td>" +
-              "<td style='text-align: right;'>" +
+              "<td style='text-align: right;'>$" +
               comma(towns[region][key][2]) +
               "</td>" +
-              "<td style='text-align: right;'>" +
+              "<td style='text-align: right;'>$" +
               comma(towns[region][key][3] / towns[region][key][1]) +
               "</td>" +
               "</tr>";
@@ -192,10 +192,10 @@
               "<td  style='text-align: right'>" +
               comma(checkNull(total_people, false)) +
               "</td>" +
-              "<td  style='text-align: right'>" +
+              "<td  style='text-align: right'>$" +
               comma(checkNull(metroPCIncome, false)) +
               "</td>" +
-              "<td  style='text-align: right'>" +
+              "<td  style='text-align: right'>$" +
               comma(checkNull(metroPCTaxable, false)) +
               "</td>" +
               "</tr>";
@@ -342,7 +342,7 @@
 
           geojson.addTo(map);
         });
-        
+
       });
 
       // set up the info window
