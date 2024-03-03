@@ -14,17 +14,18 @@
   left: 1%;
   width: 400px; /* wider to display table output */
   font: 14px/16px Arial, Helvetica, sans-serif;
+  z-index: 9999;
 }
 #accordion .ui-accordion-content {
   padding: 6px;
 }
 .info {
-  padding: 6px 8px;
+  padding: 10px 12px;
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
   background: rgba(255, 255, 255, 0.8);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .info h4 {
   margin: 0 0 5px;
@@ -36,9 +37,16 @@
 }
 .merged_stats {
   height: auto;
+  max-height: 250px;
+  overflow-y: scroll;
+  font-size: 0.95em;
+  border-radius: 2px;
 }
-
-.table {
-  border-collapse: collapse;
-  border: 1px solid black;
+.merged_stats td, .merged_stats th {
+  padding: 2px 4px;
+  border: 1px solid silver;
+}
+.source, .source a {
+  font-size: 0.9em;
+  color: gray;
 }
