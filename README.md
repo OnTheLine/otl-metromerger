@@ -10,60 +10,23 @@ https://ontheline.trincoll.edu
 ## Data
 CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
   - Town
-  - Population 2021
-  - Income per capita 2021
+  - Population
+  - Income per capita
   - Equalized Net Grand List (ENGL) as "taxable property"
 
-### For annual updates,
-
+### For annual updates
 1. Locate the appropriate dataset on Socrata (https://data.ct.gov/)
 1. Identify the dataset's API endpoint by clicking `Export` > `API Endpoint`
 1. Identify appropriate column names for town name (`town` in 2021), population (`july_1_2021_population` in 2021), per capita income (`per_capita_income_calendar` in 2021), and equalized net grand list (`equalized_net_grand_list_fye_2021` in 2021)
 1. Modify `index.html` (see lines 299-308) with all these details
-1. Just in case, consider making a backup copy of the JSON file returned by Socrata so you can always switch to a local version. For 2021 data (as of March 2024), the URL is https://data.ct.gov/resource/jrwx-mxhm.json?$select=town,july_1_2021_population,per_capita_income_calendar,equalized_net_grand_list_fye_2021 and the data is saved to `data/data.20240302.backup.json`. It is printed in the Console (see index.html, line 311).
+1. Just in case, consider making a backup copy of the JSON file returned by Socrata so you can always switch to a local version. For 2021 data (as of March 2024), the URL is https://data.ct.gov/resource/jrwx-mxhm.json?$select=town,july_1_2021_population,per_capita_income_calendar,equalized_net_grand_list_fye_2021 and the data is saved to `data/data.20240302.backup.json`. It is printed in the Console (see index.html, line 311). Alternate code line 311 would be:
+```
+$.getJSON('.data/data/20240302.backup.json', function (apiData) {
+```
 
 ## Credits
-- @kitzj Joe Kitz for redesigning code and interface
-- @erose Eli Rose for helping me with the JavaScript logic
+- @ilyankou Ilya Ilyankou for redesigning code to pull data directly from Socrata, 2024
+- @kitzj Joe Kitz for redesigning code and interface, 2024
+- @erose Eli Rose for assisting with JavaScript logic, 2015
 - @nav10003 Natalia Vorotyntseva at UConn MAGIC (http://magic.lib.uconn.edu) for code to toggle on/off polygons, display results for multiple regions, and export results
 - @alvinschang Alvin Chang for creating functions to display info window data, based on examples such as http://projects.ctmirror.org/content/2014/05/raceSchools/
-
-## To Do
-- update all README instructions below
-- revise code to allow easier data import of Income Per Capita from source, and multiply by population for calculations in the code
-- revise geojson and variable names to remove year
-- display dollar signs in table
-- right-justify numerical data in table
-- check sums for display and exports, since they do not appear to match
-- update to newer Leaflet hosted CDN https://leafletjs.com/download.html
-- add GA code
-- Create index-frame.html with caption, sources, credits
-
-
-## Steps to construct this
-Simplify instructions below: To join new data to the existing Connecticut towns geojson file, use http://mapshaper.org command line tools to jump over steps 2-3-4. See http://www.datavizforall.org/shape/mapshaper/index.html
-
-1) Begin with Leaflet choropleth tutorial at http://leafletjs.com/examples/choropleth.html
-
-2) Create simplified geoJson layer of Connecticut town boundaries
-- Download town boundaries shapefile from UConn MAGIC http://magic.libraries.uconn.edu
-- Simplify the polygon shapes to reduce size in geoJson format with this general approach http://chimera.labs.oreilly.com/books/1230000000345/ch12.html#_simplify_the_shapes
-- Use MapShaper web tool (http://www.mapshaper.org/) to reduce size without changing too much detail. In this case, I reduced Connecticut boundaries down to 1.5%, around 100k.
-- Export "shapefile - polygons", then copy and rename new .shp and .shx files into new folder with original .dbf (to retain data) and original .prj (projection) files
-
-3) Join spreadsheet town data to the new simplified polygon shapefile
-- in GIS application (such as ArcGIS or QGIS), load the new simplified polygon shapefile and spreadsheet data
-- join data to shapefile, then export > save as new shapefile in new layer, and open attributes to delete unneeded columns
-- create a new folder with four files (.shp, .shx, .dbf, .prj) and zip folder for next step
-
-4) Convert new joined shapefile (simplified boundaries + data) into js format to use in Leaflet map
-- Use ogre to ogre web client (http://ogre.adc4gis.com/) to convert zipped shapefile to geojson
-- Copy and paste the geojson output into a new file, and modify into json this way:
-- At top of new file, declare contents as a variable by adding this text:
-```
-var data =
-```
-- At the bottom of the new file, add a semicolon (;)
-- Rename file suffix as .js, place inside local directory, and upload in the Leaflet HTML index template
-
-5) See code comments in the Leaflet index.html template

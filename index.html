@@ -4,6 +4,16 @@
     <title>MetroMerger</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5488840-4"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-5488840-4');
+        </script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
@@ -288,7 +298,7 @@
           dblclick: resetFeature,
         });
       }
-      
+
       // Load data from Socrata via API
       // https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
       // JSON URL for 2021 data (March 2024): https://data.ct.gov/resource/jrwx-mxhm.json?$select=town,july_1_2021_population,per_capita_income_calendar,equalized_net_grand_list_fye_2021
@@ -314,7 +324,7 @@
         var town2data = {};
 
         for (let i = 0; i < apiData.length; i++) {
-          
+
           town2data[ apiData[i]['town'] ] = {
             'population': parseInt(apiData[i][ apiDataColumns['population'] ]),
             'incomePerCapita': parseInt(apiData[i][ apiDataColumns['incomePerCapita'] ]),
@@ -332,7 +342,7 @@
               town2data[ geojsonData.features[i].properties.name.toUpperCase() ]
             );
           }
-          
+
           geojson = L.geoJson(geojsonData, {
             style: style,
             onEachFeature: onEachFeature,
@@ -391,7 +401,7 @@
       }
       function comma(val) {
         if (isNaN(val)) {return '-'}
-        
+
         num = val;
         val = Math.round(val);
         while (/(\d+)(\d{3})/.test(val.toString())) {
