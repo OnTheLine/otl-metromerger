@@ -4,12 +4,11 @@
     <title>MetroMerger</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- To Do : Rewrite code to support Leaflet 1.x -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"
       integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -67,13 +66,13 @@
 
       // customize source link to your GitHub repo
       map.attributionControl.setPrefix(
-        'View <a href="http://github.com/ontheline/otl-metromerger" target="_blank">code on GitHub</a>, created with <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'
+        'View <a href="https://github.com/ontheline/otl-metromerger" target="_blank">code on GitHub</a>, created with <a href="https://leafletjs.com/" title="A JS library for interactive maps">Leaflet</a>'
       );
       new L.tileLayer(
-        "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
         {
           attribution:
-            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution/">Carto</a>',
         }
       ).addTo(map);
 
@@ -147,22 +146,22 @@
           } else {
             region_text +=
               "<tr>" +
-              "<td style='border: 1px solid black;'>" +
+              "<td style='text-align: left'>" +
               towns[region][key][0] +
               "</td>" +
-              "<td style='border: 1px solid black;'>" +
+              "<td style='text-align: right;'>" +
               comma(towns[region][key][1]) +
               "</td>" +
-              "<td style='border: 1px solid black;'>" +
-              comma(towns[region][key][2] / towns[region][key][1]) +
+              "<td style='text-align: right;'>$" +
+              comma(towns[region][key][2]) +
               "</td>" +
-              "<td style='border: 1px solid black;'>" +
+              "<td style='text-align: right;'>$" +
               comma(towns[region][key][3] / towns[region][key][1]) +
               "</td>" +
               "</tr>";
           }
           total_people += towns[region][key][1];
-          income_pc += towns[region][key][2];
+          income_pc += towns[region][key][2] * towns[region][key][1];
           taxable_pc += towns[region][key][3];
 
           towns_present = 1;
@@ -185,21 +184,21 @@
           if (towns_present) {
             var total =
               "<tr>" +
-              "<td  style='border: 1px solid black;'>" +
+              "<td  style=''>" +
               "<strong>Total</strong>" +
               "</td>" +
-              "<td  style='border: 1px solid black;'>" +
+              "<td  style='text-align: right'>" +
               comma(checkNull(total_people, false)) +
               "</td>" +
-              "<td  style='border: 1px solid black;'>" +
+              "<td  style='text-align: right'>$" +
               comma(checkNull(metroPCIncome, false)) +
               "</td>" +
-              "<td  style='border: 1px solid black;'>" +
+              "<td  style='text-align: right'>$" +
               comma(checkNull(metroPCTaxable, false)) +
               "</td>" +
               "</tr>";
             $("#region" + index_for_text + "_text").html(
-              "<table style='border-collapse: collapse;'><tr><th style='border: 1px solid black;'>Town</th><th style='border: 1px solid black;'>Population 2021</th><th style='border: 1px solid black;'>Income per capita</th><th style='border: 1px solid black;'>Taxable Property per capita</th></tr>" +
+              "<table style='border-collapse: collapse;'><tr><th>Town</th><th>Population " + datasetYear + "</th><th>Income per capita</th><th>Taxable Property per capita</th></tr>" +
                 region_text +
                 total +
                 "</table>"
@@ -207,7 +206,6 @@
           } else {
             $("#region" + index_for_text + "_text").html("No towns selected");
           }
-          //   $("#region" + index_for_text + "_list").html(region_text);
         }
       }
 
@@ -227,8 +225,8 @@
           towns[selected_region_num][town_id] = [
             layer.feature.properties.name,
             layer.feature.properties.population,
-            layer.feature.properties.IncACS2021,
-            layer.feature.properties.ENGLY2021,
+            layer.feature.properties.incomePerCapita,
+            layer.feature.properties.eqNetGrandList,
           ];
           update_list(selected_region_num);
         } else if (layer.feature.properties.region == selected_region_num) {
@@ -252,8 +250,8 @@
           towns[selected_region_num][town_id] = [
             layer.feature.properties.name,
             layer.feature.properties.population,
-            layer.feature.properties.IncACS2021,
-            layer.feature.properties.ENGLY2021,
+            layer.feature.properties.incomePerCapita,
+            layer.feature.properties.eqNetGrandList,
           ];
 
           update_list(layer.feature.properties.region);
@@ -268,12 +266,16 @@
 
       // create ability to clear selections
       function resetFeature(e) {
-        geojson.resetStyle(e.target);
+
+        var layer = e.target;
+
+        geojson.resetStyle(layer);
+
         totalPop -= layer.feature.properties.population;
-        totalIncome -= layer.feature.properties.IncACS2021;
-        totalTaxable -= layer.feature.properties.ENGLY2021;
-        metroPerCapIncome = totalIncome / totalPop;
-        metroPerCapTaxable = totalTaxable / totalPop;
+        totalIncome -= layer.feature.properties.incomePerCapita;
+        totalTaxable -= layer.feature.properties.eqNetGrandList;
+        metroPerCapIncome = totalIncome * totalPop;
+        metroPerCapTaxable = totalTaxable;
 
         info.update(layer.feature.properties);
       }
@@ -286,13 +288,59 @@
           dblclick: resetFeature,
         });
       }
+      
+      // Load data from Socrata via API
+      // https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
+      // JSON URL for 2021 data (March 2024): https://data.ct.gov/resource/jrwx-mxhm.json?$select=town,july_1_2021_population,per_capita_income_calendar,equalized_net_grand_list_fye_2021
+      // Backup is saved to data/data.20240302.backup.json
 
-      // set up the town map overlay
-      $.getJSON("map.geojson", function (geojsonData) {
-        L.geoJson(geojsonData, {
-          style: style,
-          onEachFeature: onEachFeature,
-        }).addTo(map);
+      var datasetYear = 2021; // used to update Table header and Source
+      var datasetUrl = 'https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data'; // used for Source only
+      var apiEndpoint = 'https://data.ct.gov/resource/jrwx-mxhm.json'; // used to pull data; locate dataset on Socrata, then click Export > API Endpoint
+
+      var apiDataColumns = {
+        'town': 'town',
+        'population': 'july_1_2021_population',
+        'incomePerCapita': 'per_capita_income_calendar',
+        'eqNetGrandList': 'equalized_net_grand_list_fye_2021',
+      };
+
+      apiEndpointFiltered = apiEndpoint + '?$select=' + Object.values(apiDataColumns).join(','); // filter API to return 4 columns only
+      console.log(apiEndpointFiltered); // use browser Console to see this URL; consider saving a backup copy of JSON locally
+
+      $.getJSON(apiEndpointFiltered, function(apiData) {
+
+        // Convert array of data points into a dictionary {town1 -> {data}, ...}
+        var town2data = {};
+
+        for (let i = 0; i < apiData.length; i++) {
+          
+          town2data[ apiData[i]['town'] ] = {
+            'population': parseInt(apiData[i][ apiDataColumns['population'] ]),
+            'incomePerCapita': parseInt(apiData[i][ apiDataColumns['incomePerCapita'] ]),
+            'eqNetGrandList': parseInt(apiData[i][ apiDataColumns['eqNetGrandList'] ])
+          }
+        }
+
+        // Load GeoJSON with town boundaries
+        $.getJSON("./data/map.geojson", function (geojsonData) {
+
+          // Assign data from Socrata API to each town
+          for (let i = 0; i < geojsonData.features.length; i++) {
+            Object.assign(
+              geojsonData.features[i].properties,
+              town2data[ geojsonData.features[i].properties.name.toUpperCase() ]
+            );
+          }
+          
+          geojson = L.geoJson(geojsonData, {
+            style: style,
+            onEachFeature: onEachFeature,
+          });
+
+          geojson.addTo(map);
+        });
+
       });
 
       // set up the info window
@@ -308,17 +356,17 @@
         var winName = (this._div.innerHTML =
           "<h4>Click to merge Connecticut towns<br />into hypothetical metro regions:</h4>" +
           (props
-            ? props.name +
-              "<br />" +
+            ? "<b>" + props.name +
+              "</b><br />" +
               comma(props.population) +
               " people" +
               "<br />$" +
-              comma(props.IncACS2021 / props.population) +
+              comma(props.incomePerCapita) +
               " income per capita" +
               "<br />$" +
-              comma(props.ENGLY2021 / props.population) +
+              comma(props.eqNetGrandList / props.population) +
               " taxable property per capita" +
-              "<br />Source:<br /><a href='https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data'>2021 CT Municipal Fiscal Indicators</a>"
+              "<br /><span class='source'>Source: <a href='" + datasetUrl + "'>" + datasetYear + " CT Municipal Fiscal Indicators</a></span>"
             : "Hover over a town"));
       };
       info.addTo(map);
@@ -342,6 +390,8 @@
         }
       }
       function comma(val) {
+        if (isNaN(val)) {return '-'}
+        
         num = val;
         val = Math.round(val);
         while (/(\d+)(\d{3})/.test(val.toString())) {

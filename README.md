@@ -10,9 +10,17 @@ https://ontheline.trincoll.edu
 ## Data
 CT Open Data, Municipal Fiscal Indicators 2021 https://data.ct.gov/Local-Government/Municipal-Fiscal-Indicators-Economic-and-Grand-Lis/jrwx-mxhm/about_data
   - Town
-  - Population 2021 (from Census ACS)
-  - Income per capita 2021 (from Census ACS)
-  - Equalized Net Grand List (ENGL) as "taxable property" (from CT OPM)
+  - Population 2021
+  - Income per capita 2021
+  - Equalized Net Grand List (ENGL) as "taxable property"
+
+### For annual updates,
+
+1. Locate the appropriate dataset on Socrata (https://data.ct.gov/)
+1. Identify the dataset's API endpoint by clicking `Export` > `API Endpoint`
+1. Identify appropriate column names for town name (`town` in 2021), population (`july_1_2021_population` in 2021), per capita income (`per_capita_income_calendar` in 2021), and equalized net grand list (`equalized_net_grand_list_fye_2021` in 2021)
+1. Modify `index.html` (see lines 299-308) with all these details
+1. Just in case, consider making a backup copy of the JSON file returned by Socrata so you can always switch to a local version. For 2021 data (as of March 2024), the URL is https://data.ct.gov/resource/jrwx-mxhm.json?$select=town,july_1_2021_population,per_capita_income_calendar,equalized_net_grand_list_fye_2021 and the data is saved to `data/data.20240302.backup.json`. It is printed in the Console (see index.html, line 311).
 
 ## Credits
 - @kitzj Joe Kitz for redesigning code and interface
